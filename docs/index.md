@@ -17,7 +17,7 @@ This service complements `hex-core-service` rather than replacing it.
 
 - `hex-core-service` remains the generic model-aware service for validation, persistence, and record operations
 - this service is the RE-specific computation layer
-- the preferred contract for this service is submission of a validated payload
+- the preferred interaction pattern for this service is submission of a validated payload
 
 ## Documentation Structure
 
@@ -26,16 +26,16 @@ This service complements `hex-core-service` rather than replacing it.
 - [API Reference](api-reference.md): endpoint-level documentation
 - [Deployment](deployment.md): container-first service deployment
 - [Integration With Hex Core Service](integration.md): expected interaction patterns
-- [Project Scope](scope.md): fixed project constraints captured in `AGENTS.md`
+- [Project Scope](scope.md): fixed project constraints and intended boundaries
 
 ## Current Status
 
-The repository currently contains the initial Rust service scaffold and the first HTTP endpoints:
+The repository currently contains the initial Rust service implementation and the first HTTP endpoints:
 
 - `GET /health`
 - `POST /compute`
 
-The API contract is being established first. Artifact loading, SHACL-backed validation, and scoring logic are the next implementation steps.
+Artifact loading, SHACL-backed validation, and scoring logic are the next implementation steps.
 
 ---
 

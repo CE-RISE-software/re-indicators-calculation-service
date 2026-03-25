@@ -45,6 +45,14 @@ Accept a validated RE indicators payload and compute a structured result for a s
   "model_family": "re-indicators-specification",
   "model_version": "0.0.3",
   "artifact_base_url": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v0.0.3/generated/",
+  "artifacts": {
+    "model_version": "0.0.3",
+    "base_url": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v0.0.3/generated/",
+    "shacl_url": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v0.0.3/generated/shacl.ttl",
+    "schema_url": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v0.0.3/generated/schema.json",
+    "owl_url": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v0.0.3/generated/owl.ttl",
+    "route_url": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v0.0.3/generated/route.json"
+  },
   "payload": {
     "id": "assessment-1",
     "indicator_specification_id": "REcycle_PV"
@@ -52,9 +60,11 @@ Accept a validated RE indicators payload and compute a structured result for a s
   "validation": {
     "basis": "shacl",
     "artifact_base_url": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v0.0.3/generated/",
-    "status": "not_implemented",
+    "shacl_url": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v0.0.3/generated/shacl.ttl",
+    "status": "artifact_resolved",
     "details": [
-      "SHACL-backed validation will be implemented against published RE indicators artifacts."
+      "Published RE indicators artifact URLs were resolved successfully.",
+      "SHACL execution is not implemented yet."
     ]
   },
   "result": {
@@ -62,7 +72,7 @@ Accept a validated RE indicators payload and compute a structured result for a s
     "total_score": null,
     "parameter_scores": [],
     "notes": [
-      "The scoring engine is not implemented yet; this response only establishes the API contract."
+      "The scoring engine is not implemented yet."
     ]
   }
 }
@@ -73,6 +83,7 @@ Accept a validated RE indicators payload and compute a structured result for a s
 - the model family is fixed internally and is not a request parameter
 - the service resolves artifacts only from `https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v{version}/generated/`
 - `model_version` is the only version selector
-- when omitted in the current scaffold, `model_version` defaults to `0.0.3` for testing
+- when omitted in the current implementation, `model_version` defaults to `0.0.3` for testing
+- the current implementation resolves artifact URLs but does not yet execute SHACL validation
 - the payload is returned so downstream systems can place computation output where needed
-- the current implementation is a scaffold and will be extended with real artifact loading, SHACL validation, and computation
+- the current implementation will be extended with real artifact loading, SHACL validation, and computation

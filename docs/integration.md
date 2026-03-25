@@ -18,9 +18,9 @@ The current intended split is:
 
 ## Supported Direction
 
-The primary contract for this service is payload submission.
+The primary interaction pattern for this service is payload submission.
 
-Record lookup through `hex-core-service` may be added as a secondary integration mode, but it is not the main API contract.
+Record lookup through `hex-core-service` may be added as a secondary integration mode, but it is not the main API entry pattern.
 
 ## Registry Constraint
 

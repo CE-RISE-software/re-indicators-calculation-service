@@ -1,5 +1,7 @@
+mod artifacts;
 mod service_types;
 
+use artifacts::ArtifactSet;
 use axum::{
     Json, Router,
     routing::{get, post},
@@ -30,23 +32,17 @@ async fn health() -> Json<HealthResponse> {
 }
 
 async fn compute(Json(request): Json<ComputeRequest>) -> Json<ComputeResponse> {
-    let model_version = request
-        .model_version
-        .unwrap_or_else(|| DEFAULT_TESTING_VERSION.to_string());
-    let artifact_base_url = artifact_base_url_for_version(&model_version);
+    let artifacts = ArtifactSet::for_requested_version(request.model_version.as_deref());
 
     Json(ComputeResponse {
         model_family: MODEL_FAMILY.to_string(),
-        model_version,
-        artifact_base_url: artifact_base_url.clone(),
+        model_version: artifacts.model_version.clone(),
+        artifact_base_url: artifacts.base_url.clone(),
+        artifacts: artifacts.clone(),
         payload: request.payload,
-        validation: ValidationSummary::not_implemented(artifact_base_url),
+        validation: ValidationSummary::artifact_resolved(&artifacts),
         result: ComputationResult::not_implemented(),
     })
-}
-
-fn artifact_base_url_for_version(version: &str) -> String {
-    ARTIFACT_BASE_URL_TEMPLATE.replace("{version}", version)
 }
 
 #[cfg(test)]
@@ -126,6 +122,16 @@ mod tests {
             json["artifact_base_url"],
             format!(
                 "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v{DEFAULT_TESTING_VERSION}/generated/"
+            )
+        );
+        assert_eq!(
+            json["validation"]["status"],
+            serde_json::Value::String("artifact_resolved".to_string())
+        );
+        assert_eq!(
+            json["artifacts"]["shacl_url"],
+            format!(
+                "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v{DEFAULT_TESTING_VERSION}/generated/shacl.ttl"
             )
         );
     }

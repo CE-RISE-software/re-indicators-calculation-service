@@ -2,7 +2,7 @@
 
 ## Design Goals
 
-The API is designed around a simple synchronous service contract:
+The API is designed around a simple synchronous service interaction:
 
 - callers submit a validated payload
 - callers choose the RE indicators specification version
@@ -15,7 +15,7 @@ The API should stay explicit and domain-specific rather than mirroring the gener
 - fixed model family: `re-indicators-specification`
 - version is required input
 - if version is omitted during current testing, the service defaults to `0.0.3`
-- payload submission is the primary compute contract
+- payload submission is the primary compute input pattern
 - SHACL validation details are part of the response
 - computation details are returned in a form that can be reused in downstream records or other models
 
@@ -55,6 +55,7 @@ Current compute responses include:
 - fixed model family
 - selected model version
 - resolved artifact base URL
+- resolved artifact URLs for SHACL, schema, OWL, and route files
 - original payload
 - validation summary
 - computation result

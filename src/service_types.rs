@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::artifacts::ArtifactSet;
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ComputeRequest {
     pub model_version: Option<String>,
@@ -11,6 +13,7 @@ pub struct ComputeResponse {
     pub model_family: String,
     pub model_version: String,
     pub artifact_base_url: String,
+    pub artifacts: ArtifactSet,
     pub payload: serde_json::Value,
     pub validation: ValidationSummary,
     pub result: ComputationResult,
@@ -20,19 +23,21 @@ pub struct ComputeResponse {
 pub struct ValidationSummary {
     pub basis: String,
     pub artifact_base_url: String,
+    pub shacl_url: String,
     pub status: String,
     pub details: Vec<String>,
 }
 
 impl ValidationSummary {
-    pub fn not_implemented(artifact_base_url: String) -> Self {
+    pub fn artifact_resolved(artifacts: &ArtifactSet) -> Self {
         Self {
             basis: "shacl".to_string(),
-            artifact_base_url,
-            status: "not_implemented".to_string(),
+            artifact_base_url: artifacts.base_url.clone(),
+            shacl_url: artifacts.shacl_url.clone(),
+            status: "artifact_resolved".to_string(),
             details: vec![
-                "SHACL-backed validation will be implemented against published RE indicators artifacts."
-                    .to_string(),
+                "Published RE indicators artifact URLs were resolved successfully.".to_string(),
+                "SHACL execution is not implemented yet.".to_string(),
             ],
         }
     }
@@ -52,10 +57,7 @@ impl ComputationResult {
             status: "not_implemented".to_string(),
             total_score: None,
             parameter_scores: Vec::new(),
-            notes: vec![
-                "The scoring engine is not implemented yet; this response only establishes the API contract."
-                    .to_string(),
-            ],
+            notes: vec!["The scoring engine is not implemented yet.".to_string()],
         }
     }
 }
