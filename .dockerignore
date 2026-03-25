@@ -1,0 +1,6 @@
+/target
+/.git
+/.github
+/.forgejo
+/docs
+*.log

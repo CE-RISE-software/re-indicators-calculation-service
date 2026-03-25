@@ -1,13 +1,14 @@
 [book]
-title = "CE-RISE Software Template Documentation"
-authors = ["CE-RISE consortium"]
+title = "RE Indicators Calculation Service"
+authors = ["CE-RISE consortium", "NILU"]
 language = "en"
 src = "."
+description = "Documentation for the CE-RISE RE indicators calculation service."
 
 [build]
 build-dir = "book"
 
 [output.html]
-git-repository-url = "https://codeberg.org/CE-RISE-software/template-software"
+git-repository-url = "https://codeberg.org/CE-RISE-software/re-indicators-calculation-service"
 sidebar-header-nav = true
 additional-js = ["theme/custom.js"]

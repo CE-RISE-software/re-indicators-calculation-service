@@ -1,4 +1,4 @@
-# CE-RISE Software Projects Template
+# CE-RISE RE Indicators Calculation Service
 
 [![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED)
 

@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: Project template for software developed within the CE-RISE Horizon Europe project
+title: CE-RISE RE Indicators Calculation Service
 type: software
 doi: xxx_to_be_obtained_xxx
 authors:
@@ -12,10 +12,10 @@ identifiers:
   - type: doi
     value: xxx_to_be_obtained_xxx
     description: This DOI represents all software versions.
-repository-code: 'https://codeberg.org/CE-RISE-software/template-software'
-url: 'https://ce-rise-software.codeberg.page/template-software/'
+repository-code: 'https://codeberg.org/CE-RISE-software/re-indicators-calculation-service'
+url: 'https://ce-rise-software.codeberg.page/re-indicators-calculation-service/'
 abstract: >-
-  Project template for data models developed within the CE-RISE Horizon Europe project.
+  Model-focused calculation service for CE-RISE digital product passports that applies the RE indicators specification to structured input data and computes indicator results for validation and integration into DPP records.
 keywords:
   - CE-RISE
   - Open Source

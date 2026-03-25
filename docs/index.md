@@ -1,11 +1,41 @@
-# CE-RISE Software Projects Template
+# RE Indicators Calculation Service
 
-This site contains a template for a faster setup of open science and open source software projects within the CE-RISE project.
+This site documents the CE-RISE RE indicators calculation service.
 
----
+The service is a dedicated HTTP application that computes RE indicator results from the `re-indicators-specification` model family. It is intentionally domain-specific: the model family is fixed, the only user-selectable model dimension is the version tag, and validation is expected to run against the published SHACL artifacts for that selected version.
 
+## What This Service Does
 
+- accepts a validated RE indicators payload together with a selected specification version
+- validates computation inputs against the published RE indicators SHACL artifacts
+- computes structured RE indicator results based on the model-defined scoring logic
+- returns a detailed result object that preserves payload, validation details, and computed scores for downstream use
 
+## Relationship With `hex-core-service`
+
+This service complements `hex-core-service` rather than replacing it.
+
+- `hex-core-service` remains the generic model-aware service for validation, persistence, and record operations
+- this service is the RE-specific computation layer
+- the preferred contract for this service is submission of a validated payload
+
+## Documentation Structure
+
+- [Architecture](architecture.md): service boundaries and internal responsibilities
+- [API Overview](api-overview.md): API goals and request/response shape
+- [API Reference](api-reference.md): endpoint-level documentation
+- [Deployment](deployment.md): container-first service deployment
+- [Integration With Hex Core Service](integration.md): expected interaction patterns
+- [Project Scope](scope.md): fixed project constraints captured in `AGENTS.md`
+
+## Current Status
+
+The repository currently contains the initial Rust service scaffold and the first HTTP endpoints:
+
+- `GET /health`
+- `POST /compute`
+
+The API contract is being established first. Artifact loading, SHACL-backed validation, and scoring logic are the next implementation steps.
 
 ---
 
