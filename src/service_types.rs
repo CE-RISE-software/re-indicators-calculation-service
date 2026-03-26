@@ -25,6 +25,8 @@ pub struct ValidationSummary {
     pub artifact_base_url: String,
     pub shacl_url: String,
     pub status: String,
+    pub fetched: bool,
+    pub bytes_fetched: Option<usize>,
     pub details: Vec<String>,
 }
 
@@ -35,8 +37,46 @@ impl ValidationSummary {
             artifact_base_url: artifacts.base_url.clone(),
             shacl_url: artifacts.shacl_url.clone(),
             status: "artifact_resolved".to_string(),
+            fetched: false,
+            bytes_fetched: None,
             details: vec![
                 "Published RE indicators artifact URLs were resolved successfully.".to_string(),
+                "SHACL execution is not implemented yet.".to_string(),
+            ],
+        }
+    }
+
+    pub fn awaiting_rdf_mapping(
+        artifacts: &ArtifactSet,
+        bytes_fetched: usize,
+        readiness_note: String,
+    ) -> Self {
+        Self {
+            basis: "shacl".to_string(),
+            artifact_base_url: artifacts.base_url.clone(),
+            shacl_url: artifacts.shacl_url.clone(),
+            status: "awaiting_rdf_mapping".to_string(),
+            fetched: true,
+            bytes_fetched: Some(bytes_fetched),
+            details: vec![
+                "Published RE indicators artifact URLs were resolved successfully.".to_string(),
+                "SHACL artifact was fetched successfully.".to_string(),
+                readiness_note,
+            ],
+        }
+    }
+
+    pub fn shacl_fetch_failed(artifacts: &ArtifactSet, reason: String) -> Self {
+        Self {
+            basis: "shacl".to_string(),
+            artifact_base_url: artifacts.base_url.clone(),
+            shacl_url: artifacts.shacl_url.clone(),
+            status: "shacl_fetch_failed".to_string(),
+            fetched: false,
+            bytes_fetched: None,
+            details: vec![
+                "Published RE indicators artifact URLs were resolved successfully.".to_string(),
+                format!("Fetching the SHACL artifact failed: {reason}"),
                 "SHACL execution is not implemented yet.".to_string(),
             ],
         }

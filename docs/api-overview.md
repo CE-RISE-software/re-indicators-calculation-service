@@ -57,7 +57,7 @@ Current compute responses include:
 - resolved artifact base URL
 - resolved artifact URLs for SHACL, schema, OWL, and route files
 - original payload
-- validation summary
+- validation summary, including whether the SHACL artifact was fetched and whether the request is ready for RDF-based validation
 - computation result
 
 The exact schema will continue to evolve as SHACL validation and scoring logic are implemented.

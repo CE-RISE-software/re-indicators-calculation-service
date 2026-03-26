@@ -20,9 +20,12 @@ impl ArtifactSet {
 
     pub fn for_version(version: &str) -> Self {
         let base_url = ARTIFACT_BASE_URL_TEMPLATE.replace("{version}", version);
+        Self::from_base_url(version.to_string(), base_url)
+    }
 
+    pub fn from_base_url(model_version: String, base_url: String) -> Self {
         Self {
-            model_version: version.to_string(),
+            model_version,
             shacl_url: format!("{base_url}shacl.ttl"),
             schema_url: format!("{base_url}schema.json"),
             owl_url: format!("{base_url}owl.ttl"),
