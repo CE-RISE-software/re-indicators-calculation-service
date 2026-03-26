@@ -7,7 +7,7 @@ The service is a dedicated HTTP application that computes RE indicator results f
 ## What This Service Does
 
 - accepts a validated RE indicators payload together with a selected specification version
-- validates computation inputs against the published RE indicators SHACL artifacts
+- delegates validation to `hex-core-service` against the RE indicators model during computation
 - computes structured RE indicator results based on the model-defined scoring logic
 - returns a detailed result object that preserves payload, validation details, and computed scores for downstream use
 

@@ -12,8 +12,8 @@ The current intended split is:
 ## Preferred Flow
 
 1. A client or user-facing application obtains or assembles the relevant digital passport payload.
-2. Validation and storage can occur through `hex-core-service`.
-3. The validated payload is submitted to this calculation service.
+2. This calculation service calls `hex-core-service` to validate the payload against the RE indicators model version being used.
+3. After delegated validation, this service computes the RE indicators result.
 4. The calculation response is then reused wherever needed in downstream records or models.
 
 ## Supported Direction
@@ -28,3 +28,15 @@ Even when integrating with `hex-core-service`, this service should resolve only:
 
 - model family: `re-indicators-specification`
 - version: caller-selected tag
+
+## Validation Delegation
+
+Validation is not intended to be reimplemented independently here.
+
+Instead, this service calls:
+
+```text
+POST /models/re-indicators-specification/versions/{version}:validate
+```
+
+on `hex-core-service` during computation.

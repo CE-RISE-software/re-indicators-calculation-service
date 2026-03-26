@@ -16,7 +16,7 @@ The API should stay explicit and domain-specific rather than mirroring the gener
 - version is required input
 - if version is omitted during current testing, the service defaults to `0.0.3`
 - payload submission is the primary compute input pattern
-- SHACL validation details are part of the response
+- validation is delegated to `hex-core-service` during computation
 - computation details are returned in a form that can be reused in downstream records or other models
 
 ## Artifact Source
@@ -57,7 +57,7 @@ Current compute responses include:
 - resolved artifact base URL
 - resolved artifact URLs for SHACL, schema, OWL, and route files
 - original payload
-- validation summary, including whether the SHACL artifact was fetched and whether the request is ready for RDF-based validation
+- validation summary returned from the `hex-core-service` validation interaction
 - computation result
 
 The exact schema will continue to evolve as SHACL validation and scoring logic are implemented.

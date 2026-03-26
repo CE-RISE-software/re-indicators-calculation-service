@@ -18,7 +18,8 @@ Example response:
   "model_family": "re-indicators-specification",
   "validation_basis": "shacl",
   "default_testing_version": "0.0.3",
-  "artifact_base_url_template": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v{version}/generated/"
+  "artifact_base_url_template": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v{version}/generated/",
+  "hex_core_base_url": "http://127.0.0.1:8080"
 }
 ```
 
@@ -59,15 +60,16 @@ Accept a validated RE indicators payload and compute a structured result for a s
   },
   "validation": {
     "basis": "shacl",
-    "artifact_base_url": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v0.0.3/generated/",
-    "shacl_url": "https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v0.0.3/generated/shacl.ttl",
-    "status": "awaiting_rdf_mapping",
-    "fetched": true,
-    "bytes_fetched": 12345,
+    "source": "hex-core-service",
+    "validation_url": "http://127.0.0.1:8080/models/re-indicators-specification/versions/0.0.3:validate",
+    "status": "validated_by_hex_core",
+    "passed": true,
+    "report": {
+      "passed": true,
+      "results": []
+    },
     "details": [
-      "Published RE indicators artifact URLs were resolved successfully.",
-      "SHACL artifact was fetched successfully.",
-      "SHACL execution needs an RDF data graph; the current request payload is a JSON object and no RDF mapping/serialization step is implemented yet."
+      "Payload validation was delegated to hex-core-service."
     ]
   },
   "result": {
@@ -87,6 +89,6 @@ Accept a validated RE indicators payload and compute a structured result for a s
 - the service resolves artifacts only from `https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v{version}/generated/`
 - `model_version` is the only version selector
 - when omitted in the current implementation, `model_version` defaults to `0.0.3` for testing
-- the current implementation attempts to fetch the selected SHACL artifact and then reports that RDF mapping is still required before SHACL can be executed against the JSON payload
+- the current implementation delegates validation to `hex-core-service` using `POST /models/re-indicators-specification/versions/{version}:validate`
 - the payload is returned so downstream systems can place computation output where needed
-- the current implementation will be extended with real artifact loading, SHACL validation, and computation
+- the current implementation will be extended with real computation logic after delegated validation
