@@ -1,3 +1,5 @@
+use reqwest::header::AUTHORIZATION;
+
 #[derive(Debug, Clone)]
 pub struct HexCoreApiClient {
     client: reqwest::Client,
@@ -5,10 +7,10 @@ pub struct HexCoreApiClient {
 }
 
 impl HexCoreApiClient {
-    pub fn new(base_url: String) -> Self {
+    pub fn new(base_url: String, timeout_secs: u64) -> Self {
         Self {
             client: reqwest::Client::builder()
-                .timeout(std::time::Duration::from_secs(15))
+                .timeout(std::time::Duration::from_secs(timeout_secs))
                 .build()
                 .expect("build reqwest client"),
             base_url: normalize_base_url(base_url),
@@ -25,13 +27,20 @@ impl HexCoreApiClient {
     pub async fn validate_payload(
         &self,
         model_version: &str,
-        payload: &serde_json::Value,
+        payload: &impl serde::Serialize,
+        bearer_token: Option<&str>,
     ) -> Result<serde_json::Value, HexCoreError> {
         let url = self.validation_url(model_version);
-        let response = self
+        let mut request = self
             .client
             .post(&url)
-            .json(&serde_json::json!({ "payload": payload }))
+            .json(&serde_json::json!({ "payload": payload }));
+
+        if let Some(token) = bearer_token {
+            request = request.header(AUTHORIZATION, format!("Bearer {token}"));
+        }
+
+        let response = request
             .send()
             .await
             .map_err(|reason| HexCoreError::RequestFailed {
@@ -65,11 +74,14 @@ impl HexCoreApiClient {
 
 impl Default for HexCoreApiClient {
     fn default() -> Self {
-        Self::new(crate::DEFAULT_HEX_CORE_BASE_URL.to_string())
+        Self::new(
+            crate::DEFAULT_HEX_CORE_BASE_URL.to_string(),
+            crate::DEFAULT_HTTP_TIMEOUT_SECS,
+        )
     }
 }
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, Clone, thiserror::Error)]
 pub enum HexCoreError {
     #[error("hex-core request failed for {url}: {reason}")]
     RequestFailed { url: String, reason: String },

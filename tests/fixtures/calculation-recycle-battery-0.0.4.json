@@ -1,0 +1,235 @@
+{
+  "artifact_type": "calculation",
+  "model_version": "0.0.4",
+  "indicator_configurations": {
+    "REcycle_Battery": {
+      "indicator_type": "REcycle",
+      "product_category": "Battery",
+      "parameters": [
+        {
+          "parameter_ref": "P1_documentation",
+          "weight": 0.02,
+          "questions": [
+            {
+              "question_id": "Q1.1",
+              "weight": 0.05,
+              "answers": [
+                { "answer_id": "doc_public", "score": 5.0 },
+                { "answer_id": "doc_independent", "score": 4.0 },
+                { "answer_id": "doc_authorized", "score": 3.0 },
+                { "answer_id": "doc_manufacturers", "score": 1.0 },
+                { "answer_id": "doc_not_available", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q1.2",
+              "weight": 0.45,
+              "answers": [
+                { "answer_id": "doc_public", "score": 5.0 },
+                { "answer_id": "doc_independent", "score": 4.0 },
+                { "answer_id": "doc_authorized", "score": 3.0 },
+                { "answer_id": "doc_manufacturers", "score": 1.0 },
+                { "answer_id": "doc_not_available", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q1.3",
+              "weight": 0.25,
+              "answers": [
+                { "answer_id": "doc_public", "score": 5.0 },
+                { "answer_id": "doc_independent", "score": 4.0 },
+                { "answer_id": "doc_authorized", "score": 3.0 },
+                { "answer_id": "doc_manufacturers", "score": 1.0 },
+                { "answer_id": "doc_not_available", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q1.4",
+              "weight": 0.25,
+              "answers": [
+                { "answer_id": "doc_public", "score": 5.0 },
+                { "answer_id": "doc_independent", "score": 4.0 },
+                { "answer_id": "doc_authorized", "score": 3.0 },
+                { "answer_id": "doc_manufacturers", "score": 1.0 },
+                { "answer_id": "doc_not_available", "score": 0.0 }
+              ]
+            }
+          ]
+        },
+        {
+          "parameter_ref": "P2_material_composition",
+          "weight": 0.02,
+          "questions": [
+            {
+              "question_id": "Q2.1",
+              "weight": 0.33,
+              "answers": [
+                { "answer_id": "bom_90plus", "score": 5.0 },
+                { "answer_id": "bom_80plus", "score": 4.0 },
+                { "answer_id": "bom_70plus", "score": 3.0 },
+                { "answer_id": "bom_60plus", "score": 2.0 },
+                { "answer_id": "bom_less60", "score": 1.0 },
+                { "answer_id": "bom_not_available", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q2.2",
+              "weight": 0.33,
+              "answers": [
+                { "answer_id": "crm_complete", "score": 5.0 },
+                { "answer_id": "crm_partial", "score": 3.0 },
+                { "answer_id": "crm_not_disclosed", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q2.3",
+              "weight": 0.33,
+              "answers": [
+                { "answer_id": "hazardous_complete", "score": 5.0 },
+                { "answer_id": "hazardous_partial", "score": 3.0 },
+                { "answer_id": "hazardous_not_disclosed", "score": 1.0 }
+              ]
+            }
+          ]
+        },
+        {
+          "parameter_ref": "P3_depollution",
+          "weight": 0.04,
+          "fixed_score": 5.0,
+          "questions": []
+        },
+        {
+          "parameter_ref": "P4_dismantling",
+          "weight": 0.04,
+          "questions": [
+            {
+              "question_id": "Q4.1.1",
+              "weight": 0.166666667,
+              "answers": [
+                { "answer_id": "battery_dismantling_5_or_less", "score": 5.0 },
+                { "answer_id": "battery_dismantling_5_to_10", "score": 4.0 },
+                { "answer_id": "battery_dismantling_10_to_15", "score": 3.0 },
+                { "answer_id": "battery_dismantling_15_to_30", "score": 2.0 },
+                { "answer_id": "battery_dismantling_over_30", "score": 1.0 },
+                { "answer_id": "battery_dismantling_cannot", "score": 0.0 },
+                { "answer_id": "battery_dismantling_data_not_available", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q4.1.2",
+              "weight": 0.166666667,
+              "answers": [
+                { "answer_id": "battery_joint_removable", "score": 5.0 },
+                { "answer_id": "battery_joint_non_removable", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q4.1.3",
+              "weight": 0.166666667,
+              "answers": [
+                { "answer_id": "battery_dismantling_tools_no_tools_basic", "score": 5.0 },
+                { "answer_id": "battery_dismantling_tools_product_group_specific", "score": 4.0 },
+                { "answer_id": "battery_dismantling_tools_commercially_available", "score": 3.0 },
+                { "answer_id": "battery_dismantling_tools_proprietary", "score": 2.0 },
+                { "answer_id": "battery_dismantling_tools_cannot", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q4.2.1",
+              "weight": 0.166666667,
+              "answers": [
+                { "answer_id": "battery_dismantling_5_or_less", "score": 5.0 },
+                { "answer_id": "battery_dismantling_5_to_10", "score": 4.0 },
+                { "answer_id": "battery_dismantling_10_to_15", "score": 3.0 },
+                { "answer_id": "battery_dismantling_15_to_30", "score": 2.0 },
+                { "answer_id": "battery_dismantling_over_30", "score": 1.0 },
+                { "answer_id": "battery_dismantling_cannot", "score": 0.0 },
+                { "answer_id": "battery_dismantling_data_not_available", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q4.2.2",
+              "weight": 0.166666667,
+              "answers": [
+                { "answer_id": "battery_joint_removable", "score": 5.0 },
+                { "answer_id": "battery_joint_non_removable", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q4.2.3",
+              "weight": 0.166666667,
+              "answers": [
+                { "answer_id": "battery_dismantling_tools_no_tools_basic", "score": 5.0 },
+                { "answer_id": "battery_dismantling_tools_product_group_specific", "score": 4.0 },
+                { "answer_id": "battery_dismantling_tools_commercially_available", "score": 3.0 },
+                { "answer_id": "battery_dismantling_tools_proprietary", "score": 2.0 },
+                { "answer_id": "battery_dismantling_tools_cannot", "score": 0.0 }
+              ]
+            }
+          ]
+        },
+        {
+          "parameter_ref": "P5_recyclability_rate",
+          "weight": 0.08,
+          "questions": [
+            {
+              "question_id": "Q5.1",
+              "weight": 0.440107672,
+              "answers": [
+                { "answer_id": "battery_rec_rate_more_than_60", "score": 5.0 },
+                { "answer_id": "battery_rec_rate_50_to_60", "score": 3.0 },
+                { "answer_id": "battery_rec_rate_below_50", "score": 1.0 },
+                { "answer_id": "battery_rec_rate_cannot_recycle", "score": 0.0 },
+                { "answer_id": "battery_rec_rate_data_not_available", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q5.2",
+              "weight": 0.100942127,
+              "answers": [
+                { "answer_id": "battery_rec_rate_more_than_60", "score": 5.0 },
+                { "answer_id": "battery_rec_rate_50_to_60", "score": 3.0 },
+                { "answer_id": "battery_rec_rate_below_50", "score": 1.0 },
+                { "answer_id": "battery_rec_rate_cannot_recycle", "score": 0.0 },
+                { "answer_id": "battery_rec_rate_data_not_available", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q5.3",
+              "weight": 0.226110363,
+              "answers": [
+                { "answer_id": "battery_rec_rate_more_than_60", "score": 5.0 },
+                { "answer_id": "battery_rec_rate_50_to_60", "score": 3.0 },
+                { "answer_id": "battery_rec_rate_below_50", "score": 1.0 },
+                { "answer_id": "battery_rec_rate_cannot_recycle", "score": 0.0 },
+                { "answer_id": "battery_rec_rate_data_not_available", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q5.4",
+              "weight": 0.187079408,
+              "answers": [
+                { "answer_id": "battery_rec_rate_more_than_60", "score": 5.0 },
+                { "answer_id": "battery_rec_rate_50_to_60", "score": 3.0 },
+                { "answer_id": "battery_rec_rate_below_50", "score": 1.0 },
+                { "answer_id": "battery_rec_rate_cannot_recycle", "score": 0.0 },
+                { "answer_id": "battery_rec_rate_data_not_available", "score": 0.0 }
+              ]
+            },
+            {
+              "question_id": "Q5.5",
+              "weight": 0.045760431,
+              "answers": [
+                { "answer_id": "battery_rec_rate_more_than_60", "score": 5.0 },
+                { "answer_id": "battery_rec_rate_50_to_60", "score": 3.0 },
+                { "answer_id": "battery_rec_rate_below_50", "score": 1.0 },
+                { "answer_id": "battery_rec_rate_cannot_recycle", "score": 0.0 },
+                { "answer_id": "battery_rec_rate_data_not_available", "score": 0.0 }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -40,3 +40,13 @@ POST /models/re-indicators-specification/versions/{version}:validate
 ```
 
 on `hex-core-service` during computation.
+
+## Authentication Forwarding
+
+When the incoming request carries:
+
+```http
+Authorization: Bearer <token>
+```
+
+the service forwards that bearer token to `hex-core-service` for the delegated validation call.

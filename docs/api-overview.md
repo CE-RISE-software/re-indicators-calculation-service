@@ -14,7 +14,7 @@ The API should stay explicit and domain-specific rather than mirroring the gener
 
 - fixed model family: `re-indicators-specification`
 - version is required input
-- if version is omitted during current testing, the service defaults to `0.0.3`
+- if version is omitted during current testing, the service defaults to `0.0.4`
 - payload submission is the primary compute input pattern
 - validation is delegated to `hex-core-service` during computation
 - computation details are returned in a form that can be reused in downstream records or other models
@@ -24,7 +24,7 @@ The API should stay explicit and domain-specific rather than mirroring the gener
 The service is hardwired to the RE indicators generated publication lineage:
 
 ```text
-https://codeberg.org/CE-RISE-models/re-indicators-specification/src/tag/pages-v{version}/generated/
+https://codeberg.org/CE-RISE-models/re-indicators-specification/raw/tag/pages-v{version}/generated/
 ```
 
 The only variable is `{version}`.
@@ -40,10 +40,20 @@ Current compute requests include:
 
 ```json
 {
-  "model_version": "0.0.3",
+  "model_version": "0.0.4",
   "payload": {
-    "id": "assessment-1",
-    "indicator_specification_id": "REcycle_PV"
+    "indicator_specification_id": "REcycle_PV",
+    "parameter_assessments": [
+      {
+        "parameter_id": "P1_product_diagnosis",
+        "question_answers": [
+          {
+            "question_id": "Q1.1",
+            "selected_answer_id": "product_id_all_key_info"
+          }
+        ]
+      }
+    ]
   }
 }
 ```
@@ -55,9 +65,7 @@ Current compute responses include:
 - fixed model family
 - selected model version
 - resolved artifact base URL
-- resolved artifact URLs for SHACL, schema, OWL, and route files
+- resolved artifact URLs for calculation, SHACL, schema, and OWL files
 - original payload
-- validation summary returned from the `hex-core-service` validation interaction
+- normalized validation summary from the `hex-core-service` validation interaction
 - computation result
-
-The exact schema will continue to evolve as SHACL validation and scoring logic are implemented.

@@ -5,7 +5,7 @@ use crate::artifacts::ArtifactSet;
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ComputeRequest {
     pub model_version: Option<String>,
-    pub payload: serde_json::Value,
+    pub payload: AssessmentPayload,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -14,9 +14,36 @@ pub struct ComputeResponse {
     pub model_version: String,
     pub artifact_base_url: String,
     pub artifacts: ArtifactSet,
-    pub payload: serde_json::Value,
+    pub payload: AssessmentPayload,
     pub validation: ValidationSummary,
     pub result: ComputationResult,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct AssessmentPayload {
+    pub indicator_specification_id: String,
+    #[serde(default)]
+    pub parameter_assessments: Vec<PayloadParameterAssessment>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct PayloadParameterAssessment {
+    pub parameter_id: String,
+    #[serde(default)]
+    pub question_answers: Vec<PayloadQuestionAnswer>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct PayloadQuestionAnswer {
+    pub question_id: String,
+    pub selected_answer_id: Option<String>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct ErrorResponse {
+    pub code: String,
+    pub message: String,
+    pub details: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -26,7 +53,9 @@ pub struct ValidationSummary {
     pub validation_url: String,
     pub status: String,
     pub passed: Option<bool>,
-    pub report: Option<serde_json::Value>,
+    pub finding_count: Option<u64>,
+    pub findings_present: Option<bool>,
+    pub raw_report: Option<serde_json::Value>,
     pub details: Vec<String>,
 }
 
@@ -38,7 +67,9 @@ impl ValidationSummary {
             validation_url,
             status: "validation_skipped".to_string(),
             passed: None,
-            report: None,
+            finding_count: None,
+            findings_present: None,
+            raw_report: None,
             details: vec![
                 "Validation delegation to hex-core-service is disabled for this runtime."
                     .to_string(),
@@ -48,29 +79,53 @@ impl ValidationSummary {
 
     pub fn validated_by_hex_core(validation_url: String, report: serde_json::Value) -> Self {
         let passed = report.get("passed").and_then(serde_json::Value::as_bool);
+        let finding_count = extract_finding_count(&report);
         Self {
             basis: "shacl".to_string(),
             source: "hex-core-service".to_string(),
             validation_url,
             status: "validated_by_hex_core".to_string(),
             passed,
-            report: Some(report),
+            finding_count,
+            findings_present: finding_count.map(|count| count > 0),
+            raw_report: Some(report),
             details: vec!["Payload validation was delegated to hex-core-service.".to_string()],
         }
     }
+}
 
-    pub fn hex_core_validation_failed(validation_url: String, reason: String) -> Self {
-        Self {
-            basis: "shacl".to_string(),
-            source: "hex-core-service".to_string(),
-            validation_url,
-            status: "hex_core_validation_failed".to_string(),
-            passed: None,
-            report: None,
-            details: vec![format!(
-                "Delegated validation through hex-core-service failed: {reason}"
-            )],
+fn extract_finding_count(report: &serde_json::Value) -> Option<u64> {
+    let keys = ["results", "findings", "violations"];
+    for key in keys {
+        if let Some(values) = report.get(key).and_then(serde_json::Value::as_array) {
+            return Some(values.len() as u64);
         }
+    }
+    None
+}
+
+#[cfg(test)]
+mod tests {
+    use super::ValidationSummary;
+
+    #[test]
+    fn validation_summary_extracts_findings_from_results() {
+        let summary = ValidationSummary::validated_by_hex_core(
+            "http://127.0.0.1:8080/models/re-indicators-specification/versions/0.0.4:validate"
+                .to_string(),
+            serde_json::json!({
+                "passed": false,
+                "results": [
+                    {"path": "x"},
+                    {"path": "y"}
+                ]
+            }),
+        );
+
+        assert_eq!(summary.passed, Some(false));
+        assert_eq!(summary.finding_count, Some(2));
+        assert_eq!(summary.findings_present, Some(true));
+        assert!(summary.raw_report.is_some());
     }
 }
 
@@ -83,12 +138,12 @@ pub struct ComputationResult {
 }
 
 impl ComputationResult {
-    pub fn failed(reason: String) -> Self {
+    pub fn computed(total_score: f64, parameter_scores: Vec<ParameterScore>, note: String) -> Self {
         Self {
-            status: "failed".to_string(),
-            total_score: None,
-            parameter_scores: Vec::new(),
-            notes: vec![reason],
+            status: "computed".to_string(),
+            total_score: Some(total_score),
+            parameter_scores,
+            notes: vec![note],
         }
     }
 }
@@ -113,7 +168,10 @@ pub struct HealthResponse {
     pub model_family: &'static str,
     pub validation_basis: &'static str,
     pub default_testing_version: &'static str,
-    pub artifact_base_url_template: &'static str,
+    pub artifact_base_url_template: String,
     pub hex_core_base_url: String,
-    pub spec_source_dir: String,
+    pub http_timeout_secs: u64,
+    pub bind_address: String,
+    pub port: u16,
+    pub calculation_artifact_url_template: String,
 }

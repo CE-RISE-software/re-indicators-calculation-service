@@ -12,6 +12,32 @@ A repository to provide a template for a faster setup of open science and open s
 - This README should be expanded as needed. Sections `License`, `Contributing`, and the footer should be retained but updated as needed.
 - Documentation in `docs` using [Book](https://book.deno.land/) and released through Codeberg action on each push at https://ce-rise-software.codeberg.page/template-software/
 
+## Local Demonstration
+
+This repository now includes a local-only demonstrator stack modeled after the CE-RISE local demonstrator approach.
+
+It lives in:
+
+- `compose/`
+- `scripts/`
+- `demo.sh`
+
+It is intended for manual local integration checks only and is not part of CI.
+
+Typical flow:
+
+```bash
+./demo.sh demo
+```
+
+That path:
+
+- syncs the released RE indicators artifacts locally
+- starts `artifact-server`
+- starts `hex-core-service` in memory mode with local no-auth settings
+- starts `re-indicators-calculation-service`
+- validates and computes a sample `REcycle_Battery` payload locally
+
 
 ## License
 
