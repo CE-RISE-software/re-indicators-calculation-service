@@ -1,6 +1,6 @@
 # CE-RISE RE Indicators Calculation Service
 
-[![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19256093.svg)](https://doi.org/10.5281/zenodo.19256093)
 
 A containerized HTTP service for computing RE indicator results from the published `re-indicators-specification` model artifacts.
 
