@@ -17,7 +17,7 @@
         "Digital Product Passport",
         "Digital Material Passport"
     ],
-    "notes": "v0.0.1 - Initial sketch of project template.",
+    "notes": "v0.0.1 - Initial tested full implementation of the service.",
     "communities": [{ "identifier": "ce-rise" }, { "identifier": "impact" }],
     "grants": [{ "id": "101092281" }],
     "related_identifiers": [
