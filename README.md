@@ -26,14 +26,10 @@ Typical flow:
 
 For full API and deployment details, use the Pages documentation:
 
-- documentation home:
-  `https://ce-rise-software.codeberg.page/re-indicators-calculation-service/`
-- API reference:
-  `https://ce-rise-software.codeberg.page/re-indicators-calculation-service/api-reference.html`
-- deployment:
-  `https://ce-rise-software.codeberg.page/re-indicators-calculation-service/deployment.html`
-- local testing:
-  `https://ce-rise-software.codeberg.page/re-indicators-calculation-service/local-testing.html`
+- [Documentation Home](https://ce-rise-software.codeberg.page/re-indicators-calculation-service/)
+- [API Reference](https://ce-rise-software.codeberg.page/re-indicators-calculation-service/api-reference.html)
+- [Deployment](https://ce-rise-software.codeberg.page/re-indicators-calculation-service/deployment.html)
+- [Local Testing](https://ce-rise-software.codeberg.page/re-indicators-calculation-service/local-testing.html)
 
 ## Quick Start
 
