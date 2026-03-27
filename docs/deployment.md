@@ -66,6 +66,12 @@ docker run --rm \
 
 `ARTIFACT_BASE_URL_TEMPLATE` must contain `{version}` so the service can resolve the released artifact set for the selected model version.
 
+## Local-Only Demonstrator
+
+This repository also includes a local-only integration path documented in [Local Testing](local-testing.md).
+
+That path is intended for manual checks on a developer machine and is not part of CI.
+
 ## Next Deployment Concerns
 
 As the implementation grows, deployment documentation should be expanded to cover:

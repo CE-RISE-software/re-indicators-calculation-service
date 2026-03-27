@@ -25,6 +25,7 @@ This service complements `hex-core-service` rather than replacing it.
 - [API Overview](api-overview.md): API goals and request/response shape
 - [API Reference](api-reference.md): endpoint-level documentation
 - [Deployment](deployment.md): container-first service deployment
+- [Local Testing](local-testing.md): local-only demonstrator and manual integration flow
 - [Integration With Hex Core Service](integration.md): expected interaction patterns
 - [Project Scope](scope.md): fixed project constraints and intended boundaries
 

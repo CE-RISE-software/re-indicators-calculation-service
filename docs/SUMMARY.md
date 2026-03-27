@@ -5,6 +5,7 @@
 - [API Overview](api-overview.md)
 - [API Reference](api-reference.md)
 - [Deployment](deployment.md)
+- [Local Testing](local-testing.md)
 - [Integration With Hex Core Service](integration.md)
 
 # Governance

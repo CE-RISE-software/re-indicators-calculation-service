@@ -13,4 +13,10 @@ for artifact in schema.json shacl.ttl model.ttl calculation.json; do
   curl -fsSL "$base_url/$artifact" -o "$target_dir/$artifact"
 done
 
+cat >"$target_dir/route.json" <<'EOF'
+{
+  "op": "create"
+}
+EOF
+
 echo "Artifacts synced to $target_dir"
