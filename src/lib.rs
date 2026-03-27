@@ -23,15 +23,42 @@ use service_types::{
 };
 #[cfg(test)]
 use std::sync::{Arc, Mutex};
+use utoipa::OpenApi;
 
 pub const MODEL_FAMILY: &str = "re-indicators-specification";
 pub const VALIDATION_BASIS: &str = "shacl";
 pub const DEFAULT_TESTING_VERSION: &str = "0.0.4";
-pub const DEFAULT_ARTIFACT_BASE_URL_TEMPLATE: &str = "https://codeberg.org/CE-RISE-models/re-indicators-specification/raw/tag/pages-v{version}/generated/";
+pub const DEFAULT_ARTIFACT_BASE_URL_TEMPLATE: &str =
+    "https://ce-rise-models.codeberg.page/re-indicators-specification/generated/";
 pub const DEFAULT_HEX_CORE_BASE_URL: &str = "http://127.0.0.1:8080";
 pub const DEFAULT_HTTP_TIMEOUT_SECS: u64 = 15;
 pub const DEFAULT_BIND_ADDRESS: &str = "0.0.0.0";
 pub const DEFAULT_PORT: u16 = 8081;
+
+#[derive(OpenApi)]
+#[openapi(
+    paths(health, compute, openapi_json),
+    components(
+        schemas(
+            service_types::ComputeRequest,
+            service_types::ComputeResponse,
+            service_types::AssessmentPayload,
+            service_types::PayloadParameterAssessment,
+            service_types::PayloadQuestionAnswer,
+            service_types::ErrorResponse,
+            service_types::ValidationSummary,
+            service_types::ComputationResult,
+            service_types::ParameterScore,
+            service_types::QuestionScore,
+            service_types::HealthResponse,
+            artifacts::ArtifactSet
+        )
+    ),
+    tags(
+        (name = "re-indicators-calculation-service", description = "RE indicators calculation service API")
+    )
+)]
+struct ApiDoc;
 
 pub fn app() -> Router {
     app_with_config(RuntimeConfig::from_env(), true)
@@ -60,9 +87,17 @@ fn app_with_config(config: RuntimeConfig, validate_via_hex_core: bool) -> Router
     Router::new()
         .route("/health", get(health))
         .route("/compute", post(compute))
+        .route("/openapi.json", get(openapi_json))
         .with_state(state)
 }
 
+#[utoipa::path(
+    get,
+    path = "/health",
+    responses(
+        (status = 200, description = "Service health", body = HealthResponse)
+    )
+)]
 async fn health(State(state): State<AppState>) -> Json<HealthResponse> {
     Json(HealthResponse {
         status: "ok",
@@ -79,6 +114,17 @@ async fn health(State(state): State<AppState>) -> Json<HealthResponse> {
             state.runtime_config.artifact_base_url_template
         ),
     })
+}
+
+#[utoipa::path(
+    get,
+    path = "/openapi.json",
+    responses(
+        (status = 200, description = "OpenAPI document", body = serde_json::Value)
+    )
+)]
+async fn openapi_json() -> Json<serde_json::Value> {
+    Json(serde_json::to_value(ApiDoc::openapi()).expect("serialize openapi document to json value"))
 }
 
 #[derive(Clone)]
@@ -98,6 +144,19 @@ struct AppState {
     mock_calculation_artifact: Option<computation::CalculationArtifact>,
 }
 
+#[utoipa::path(
+    post,
+    path = "/compute",
+    request_body = ComputeRequest,
+    responses(
+        (status = 200, description = "Computed RE indicator result", body = ComputeResponse),
+        (status = 400, description = "Invalid request body", body = ErrorResponse),
+        (status = 401, description = "Delegated validation unauthorized", body = ErrorResponse),
+        (status = 404, description = "Model version or calculation artifact not found", body = ErrorResponse),
+        (status = 422, description = "Delegated validation failed or unknown indicator", body = ErrorResponse),
+        (status = 502, description = "Upstream validation or artifact fetch failed", body = ErrorResponse)
+    )
+)]
 async fn compute(
     State(state): State<AppState>,
     headers: HeaderMap,
@@ -390,6 +449,29 @@ mod tests {
             .unwrap();
 
         assert_eq!(response.status(), StatusCode::OK);
+    }
+
+    #[tokio::test]
+    async fn openapi_endpoint_reports_current_paths() {
+        let response = app_with_config(test_config(), false)
+            .oneshot(
+                Request::builder()
+                    .uri("/openapi.json")
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::OK);
+
+        let body = to_bytes(response.into_body(), usize::MAX).await.unwrap();
+        let json: Value = serde_json::from_slice(&body).unwrap();
+
+        assert_eq!(json["openapi"], "3.1.0");
+        assert!(json["paths"]["/health"].is_object());
+        assert!(json["paths"]["/compute"].is_object());
+        assert!(json["paths"]["/openapi.json"].is_object());
     }
 
     #[tokio::test]

@@ -4,7 +4,6 @@ This repository includes a local-only demonstrator path for manual integration t
 
 It is intended to verify the full local flow:
 
-- serve released RE indicators artifacts locally
 - run `hex-core-service` locally in memory mode
 - run `re-indicators-calculation-service` locally
 - validate an RE indicators payload through `hex-core-service`
@@ -17,7 +16,6 @@ This path is not part of CI.
 The local testing setup is defined by:
 
 - `demo.sh`
-- `scripts/sync-local-artifacts.sh`
 - `scripts/validate-local-compose.sh`
 - `compose/docker-compose.yml`
 - `compose/.env.example`
@@ -27,7 +25,6 @@ The local testing setup is defined by:
 
 The local stack starts:
 
-- `artifact-server`
 - `hex-core-service`
 - `re-indicators-calculation-service`
 
@@ -35,16 +32,13 @@ Notes:
 
 - `hex-core-service` runs with `IO_ADAPTER_ID=memory`
 - `hex-core-service` runs with `AUTH_MODE=none`
+- `hex-core-service` is pulled as a container image
+- the registry catalog points directly to the published `schema.json`, `shacl.ttl`, and `model.ttl` artifact URLs on the published Pages site
+- this service resolves `calculation.json` directly from the published Pages artifact URL
 - no database is required
 - this setup is only for local development and manual validation
 
 ## Commands
-
-Sync local artifacts:
-
-```bash
-./demo.sh sync-artifacts
-```
 
 Run the local validation flow:
 

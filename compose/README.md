@@ -10,24 +10,12 @@ The stack is intentionally separate from CI/CD:
 
 Services:
 
-- `artifact-server`
 - `hex-core-service`
 - `re-indicators-calculation-service`
 
 No database is included in this stack.
 
-Before starting the stack, sync the required released RE indicators artifacts into `compose/registry/artifacts/` with:
-
-```bash
-./scripts/sync-local-artifacts.sh
-```
-
-The synced local artifact set currently includes:
-
-- `schema.json`
-- `shacl.ttl`
-- `model.ttl`
-- `calculation.json`
+The local stack uses a registry catalog with direct published artifact URLs on Codeberg. The calculation service also resolves `calculation.json` directly from the published versioned URL template.
 
 Then run the local demonstration with:
 

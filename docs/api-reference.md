@@ -27,6 +27,22 @@ Example response:
 }
 ```
 
+## `GET /openapi.json`
+
+Machine-readable OpenAPI document for the current service API.
+
+This endpoint returns the generated OpenAPI description for:
+
+- `GET /health`
+- `GET /openapi.json`
+- `POST /compute`
+
+Example usage:
+
+```bash
+curl -sS http://127.0.0.1:8081/openapi.json
+```
+
 ## `POST /compute`
 
 Accept a validated RE indicators payload and compute a structured result for a selected model version.
@@ -255,6 +271,7 @@ Computation fields:
 - computation uses the published `calculation.json` artifact for the same version
 - the payload is returned so downstream systems can place computation output where needed
 - the effective artifact base template, `hex-core-service` base URL, and HTTP timeout are runtime-configurable and exposed by `GET /health`
+- the machine-readable OpenAPI document is exposed at `GET /openapi.json`
 - the validation section is normalized by this service and only keeps the upstream report as `raw_report`
 
 ## Error Responses

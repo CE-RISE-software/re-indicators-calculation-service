@@ -2,42 +2,99 @@
 
 [![DOI](https://zenodo.org/badge/DOI/TOBEOBTAINED.svg)](https://doi.org/TOBEOBTAINED)
 
-A repository to provide a template for a faster setup of open science and open source software projects within the CE-RISE project.
+A containerized HTTP service for computing RE indicator results from the published `re-indicators-specification` model artifacts.
+
+The service:
+
+- accepts an RE indicators assessment payload
+- delegates validation to `hex-core-service`
+- loads scoring data from the published `calculation.json`
+- returns a structured result with payload, validation summary, and scores
 
 ---
 
-## What this repository contains
-- Actions in `.forgejo/workflows` for Codeberg runners to
-- Actions in `.github/workflows` for GitHub runners in mirror to tag releases and initiate archiving on Zenodo through the GitHub / Zenodo integration.
-- This README should be expanded as needed. Sections `License`, `Contributing`, and the footer should be retained but updated as needed.
-- Documentation in `docs` using [Book](https://book.deno.land/) and released through Codeberg action on each push at https://ce-rise-software.codeberg.page/template-software/
+## How to use the service
 
-## Local Demonstration
-
-This repository now includes a local-only demonstrator stack modeled after the CE-RISE local demonstrator approach.
-
-It lives in:
-
-- `compose/`
-- `scripts/`
-- `demo.sh`
-
-It is intended for manual local integration checks only and is not part of CI.
+This service is meant to sit beside `hex-core-service`.
 
 Typical flow:
 
+1. An RE indicators payload is submitted to this service.
+2. This service delegates validation to `hex-core-service`.
+3. This service loads scoring data from the published RE indicators artifacts.
+4. The service returns a structured computation result.
+
+For full API and deployment details, use the Pages documentation:
+
+- documentation home:
+  `https://ce-rise-software.codeberg.page/re-indicators-calculation-service/`
+- API reference:
+  `https://ce-rise-software.codeberg.page/re-indicators-calculation-service/api-reference.html`
+- deployment:
+  `https://ce-rise-software.codeberg.page/re-indicators-calculation-service/deployment.html`
+- local testing:
+  `https://ce-rise-software.codeberg.page/re-indicators-calculation-service/local-testing.html`
+
+## Quick Start
+
+The released container image name in the registry is:
+
+- `re-indicators-calculation`
+
+Example pull from the current CE-RISE registry namespace:
+
 ```bash
-./demo.sh demo
+docker pull rg.fr-par.scw.cloud/ce-rise-software/re-indicators-calculation:latest
 ```
 
-That path:
+Run the service locally:
 
-- syncs the released RE indicators artifacts locally
-- starts `artifact-server`
-- starts `hex-core-service` in memory mode with local no-auth settings
-- starts `re-indicators-calculation-service`
+```bash
+docker run --rm \
+  -p 8081:8080 \
+  -e HEX_CORE_BASE_URL=http://host.docker.internal:8080 \
+  -e ARTIFACT_BASE_URL_TEMPLATE=https://ce-rise-models.codeberg.page/re-indicators-specification/generated/ \
+  -e HTTP_TIMEOUT_SECS=15 \
+  rg.fr-par.scw.cloud/ce-rise-software/re-indicators-calculation:latest
+```
+
+Check the service:
+
+```bash
+curl -sS http://127.0.0.1:8081/health
+curl -sS http://127.0.0.1:8081/openapi.json
+```
+
+Main compute endpoint:
+
+- `POST /compute`
+
+Minimal request shape:
+
+```json
+{
+  "model_version": "0.0.4",
+  "payload": {
+    "indicator_specification_id": "REcycle_Battery",
+    "parameter_assessments": []
+  }
+}
+```
+
+## Local Demonstration
+
+This repository includes a local-only demonstrator that:
+
+- pulls and runs `hex-core-service`
+- builds and runs `re-indicators-calculation-service`
 - validates and computes a sample `REcycle_Battery` payload locally
 
+Typical commands:
+
+```bash
+./demo.sh validate
+./demo.sh demo
+```
 
 ## License
 
@@ -45,7 +102,7 @@ Licensed under the [European Union Public Licence v1.2 (EUPL-1.2)](LICENSE).
 
 ## Contributing
 
-This repository is maintained on [Codeberg](https://codeberg.org/CE-RISE-software/template-software) — the canonical source of truth. The GitHub repository is a read mirror used for release archival and Zenodo integration. Issues and pull requests should be opened on Codeberg.
+This repository is maintained on [Codeberg](https://codeberg.org/CE-RISE-software/re-indicators-calculation-service) and mirrored to GitHub for release archival workflows.
 
 ---
 

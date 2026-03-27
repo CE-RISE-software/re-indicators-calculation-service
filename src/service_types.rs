@@ -1,14 +1,15 @@
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 
 use crate::artifacts::ArtifactSet;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, ToSchema)]
 pub struct ComputeRequest {
     pub model_version: Option<String>,
     pub payload: AssessmentPayload,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, ToSchema)]
 pub struct ComputeResponse {
     pub model_family: String,
     pub model_version: String,
@@ -19,34 +20,34 @@ pub struct ComputeResponse {
     pub result: ComputationResult,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, ToSchema)]
 pub struct AssessmentPayload {
     pub indicator_specification_id: String,
     #[serde(default)]
     pub parameter_assessments: Vec<PayloadParameterAssessment>,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, ToSchema)]
 pub struct PayloadParameterAssessment {
     pub parameter_id: String,
     #[serde(default)]
     pub question_answers: Vec<PayloadQuestionAnswer>,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, ToSchema)]
 pub struct PayloadQuestionAnswer {
     pub question_id: String,
     pub selected_answer_id: Option<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, ToSchema)]
 pub struct ErrorResponse {
     pub code: String,
     pub message: String,
     pub details: Option<serde_json::Value>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, ToSchema)]
 pub struct ValidationSummary {
     pub basis: String,
     pub source: String,
@@ -129,7 +130,7 @@ mod tests {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, ToSchema)]
 pub struct ComputationResult {
     pub status: String,
     pub total_score: Option<f64>,
@@ -148,21 +149,21 @@ impl ComputationResult {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, ToSchema)]
 pub struct ParameterScore {
     pub parameter_id: String,
     pub computed_score: Option<f64>,
     pub question_scores: Vec<QuestionScore>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, ToSchema)]
 pub struct QuestionScore {
     pub question_id: String,
     pub selected_answer_id: Option<String>,
     pub answer_score: Option<f64>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, ToSchema)]
 pub struct HealthResponse {
     pub status: &'static str,
     pub model_family: &'static str,

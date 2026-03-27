@@ -3,10 +3,9 @@
         {
             "model": "re-indicators-specification",
             "version": "0.0.4",
-            "route_url": "http://artifact-server/models/re-indicators-specification/0.0.4/route.json",
-            "schema_url": "http://artifact-server/models/re-indicators-specification/0.0.4/schema.json",
-            "shacl_url": "http://artifact-server/models/re-indicators-specification/0.0.4/shacl.ttl",
-            "owl_url": "http://artifact-server/models/re-indicators-specification/0.0.4/model.ttl"
+            "schema_url": "https://ce-rise-models.codeberg.page/re-indicators-specification/generated/schema.json",
+            "shacl_url": "https://ce-rise-models.codeberg.page/re-indicators-specification/generated/shacl.ttl",
+            "owl_url": "https://ce-rise-models.codeberg.page/re-indicators-specification/generated/model.ttl"
         }
     ]
 }

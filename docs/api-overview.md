@@ -32,6 +32,7 @@ The only variable is `{version}`.
 ## Current Endpoints
 
 - `GET /health`
+- `GET /openapi.json`
 - `POST /compute`
 
 ## Request Shape

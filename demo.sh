@@ -4,12 +4,11 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 compose_file="$repo_root/compose/docker-compose.yml"
 compose_env="$repo_root/compose/.env"
+compose_env_example="$repo_root/compose/.env.example"
 compute_request="$repo_root/payloads/recycle_battery_compute_request.json"
 
 ensure_env() {
-  if [[ ! -f "$compose_env" ]]; then
-    cp "$repo_root/compose/.env.example" "$compose_env"
-  fi
+  cp "$compose_env_example" "$compose_env"
 }
 
 compose_cmd() {
@@ -41,15 +40,14 @@ wait_for_http_code() {
 
 print_help() {
   cat <<'EOF'
-Usage: ./demo.sh {up|demo|down|clean|validate|sync-artifacts}
+Usage: ./demo.sh {up|demo|down|clean|validate}
 
 Actions:
-  up              Sync local artifacts and start the stack in the background.
+  up              Start the stack in the background.
   demo            Start the stack and run the local validation + compute demonstration.
   down            Stop the stack and remove compose-managed containers.
-  clean           Stop the stack and remove compose-managed containers plus generated artifacts.
+  clean           Stop the stack and remove compose-managed containers.
   validate        Run the local compose smoke validation.
-  sync-artifacts  Download released RE indicators artifacts for local serving.
 EOF
 }
 
@@ -93,12 +91,10 @@ run_demo_pipeline() {
 case "${1:-}" in
   up)
     ensure_env
-    "$repo_root/scripts/sync-local-artifacts.sh"
-    compose_cmd up -d artifact-server hex-core-service re-indicators-calculation-service
+    compose_cmd up -d --build hex-core-service re-indicators-calculation-service
     ;;
   demo)
     ensure_env
-    "$repo_root/scripts/sync-local-artifacts.sh"
     cleanup_demo() {
       docker compose -f "$compose_file" --env-file "$compose_env" down --remove-orphans >/tmp/re-indicators-demo-down.log 2>&1 || {
         cat /tmp/re-indicators-demo-down.log >&2
@@ -106,7 +102,7 @@ case "${1:-}" in
     }
     trap cleanup_demo EXIT
     docker compose -f "$compose_file" --env-file "$compose_env" down --remove-orphans >/dev/null 2>&1 || true
-    timeout 300s docker compose -f "$compose_file" --env-file "$compose_env" up -d artifact-server hex-core-service re-indicators-calculation-service >/tmp/re-indicators-demo-up.log 2>&1 || {
+    timeout 300s docker compose -f "$compose_file" --env-file "$compose_env" up -d --build hex-core-service re-indicators-calculation-service >/tmp/re-indicators-demo-up.log 2>&1 || {
       cat /tmp/re-indicators-demo-up.log >&2
       exit 1
     }
@@ -119,15 +115,10 @@ case "${1:-}" in
   clean)
     ensure_env
     compose_cmd down --remove-orphans --volumes
-    rm -rf "$repo_root/compose/registry/artifacts/re-indicators-specification"
     ;;
   validate)
     ensure_env
     "$repo_root/scripts/validate-local-compose.sh"
-    ;;
-  sync-artifacts)
-    ensure_env
-    "$repo_root/scripts/sync-local-artifacts.sh"
     ;;
   *)
     print_help >&2

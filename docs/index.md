@@ -34,6 +34,7 @@ This service complements `hex-core-service` rather than replacing it.
 The repository currently contains the initial Rust service implementation and the first HTTP endpoints:
 
 - `GET /health`
+- `GET /openapi.json`
 - `POST /compute`
 
 Artifact loading, SHACL-backed validation, and scoring logic are the next implementation steps.
